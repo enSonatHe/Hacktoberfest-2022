@@ -1,0 +1,11 @@
+alert:
+requirement components:
+color
+icon: alert_info icon
+       : dismiss/cross icon
+title
+body
+clickable link
+footer: viewmoreButton & Dismiss
+automatic dismiss timeout
+darkmode
