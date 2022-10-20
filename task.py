@@ -1,0 +1,9 @@
+str1 = "I love python"
+str2 = "I don't love java"
+setl1 = set(str1.split(" "))
+setl2 = set(str2.split(" "))
+common = setl1.intersection(setl2)
+unique = (setl1.union(setl2))
+unique1 = unique.difference(common)
+print(f'unique = {list(unique1)}')
+print(f'common = {list(common)}')
