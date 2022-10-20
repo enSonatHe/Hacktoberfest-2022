@@ -1,0 +1,4 @@
+avatar:
+size
+tile/design:circle or square
+slot for image or text 
