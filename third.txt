@@ -1,0 +1,9 @@
+    1. structure props but not a long props 
+    2. no nested function
+    3. use kebab-case for events
+    4. use camelCase for props and kebab-case in template to call props
+    5. don’t use v-for and v-if together instead use computed() for filter or other methods
+    6. 
+    • @ is short for v-on:
+    • : is short for v-bind
+    • # is short for v-slot
