@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Meta-Datas -->
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="icon" href="time-fill.svg" sizes="any" type="image/svg+xml" />
+
+        <title>Clock - Sushant Rauniyars</title>
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" type="text/css" href="https://dashboard-sushantrauniyar.vercel.app/assets/css/bootstrap.css" />
+
+        <!-- Remix Icon -->
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet" />
+
+        <!-- Style -->
+        <link rel="stylesheet" type="text/css" href="https://dashboard-sushantrauniyar.vercel.app/assets/css/style.css" />
+
+        <!-- Google Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100&display=swap" rel="stylesheet" />
+
+        <!-- Additional Styles -->
+        <style type="text/css">
+            @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100&display=swap");
+
+            html {
+                height: 100%;
+            }
+
+            header {
+                height: 50px;
+            }
+
+            body {
+                position: absolute;
+                height: 100%;
+                overflow-x: hidden;
+                display: revert;
+                background: var(--white);
+                color: var(--black);
+            }
+
+            .footer {
+                bottom: 0;
+                padding: 2rem;
+            }
+
+            .darkmode {
+                --black: #fff;
+                --white: #000;
+                /*background: #292c35;
+			    background: var(--black);
+			    color: var(--white);*/
+            }
+
+            .container {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                display: grid;
+                place-content: center;
+                place-items: center;
+            }
+
+            .brightness::-webkit-slider-thumb {
+                background: var(--black);
+            }
+
+            .darkmode .brightness::-webkit-slider-thumb {
+                background: var(--white);
+            }
+
+            .time {
+                font-family: "Roboto Mono", monospace;
+                font-size: 4rem;
+                margin: auto;
+                text-align: right;
+                width: 100%;
+                font-weight: 200;
+                cursor: default;
+                user-select: none;
+            }
+
+            .date {
+                font-family: "Roboto Mono", monospace;
+                font-size: 2rem;
+                margin: auto;
+                text-align: right;
+                width: 100%;
+                font-weight: 200;
+                cursor: default;
+                user-select: none;
+            }
+
+            #switch {
+                display: flex;
+                column-gap: 3rem;
+                place-content: end;
+                place-items: center;
+                padding: 2rem;
+                float: right;
+            }
+
+            :fullscreen #switch {
+                display: none;
+            }
+
+            svg {
+                height: 2rem;
+            }
+
+            button {
+                font-size: 2rem;
+            }
+
+            .ri-moon-fill {
+                color: #fff;
+            }
+
+            /*================ Responsive ================*/
+            @media screen and (min-width: 375.98px) {
+                .time {
+                    font-size: 6rem;
+                }
+
+                .date {
+                    font-size: 3rem;
+                }
+            }
+            /*================ Responsive ================*/
+            @media screen and (min-width: 575.98px) {
+                .time {
+                    font-size: 10rem;
+                }
+
+                .date {
+                    font-size: 4rem;
+                }
+            }
+            /*================ Responsive ================*/
+            @media screen and (min-width: 1023.1px) {
+                .time {
+                    font-size: 15rem;
+                }
+
+                .date {
+                    font-size: 6rem;
+                }
+
+                .container {
+                    top: 50%;
+                }
+            }
+            /*================ Responsive ================*/
+            @media screen and (min-width: 1299.98px) {
+                .time {
+                    font-size: 20rem;
+                }
+
+                .date {
+                    font-size: 8rem;
+                }
+            }
+        </style>
+    </head>
+
+    <body onclick="closeFullscreen();">
+        <div class="container">
+            <h1 class="time" id="printTime"></h1>
+            <h1 class="date" id="printDate"></h1>
+            <h1 class="date" id="printDay"></h1>
+        </div>
+
+        <div class="footer absolute">
+            <p>Designed by - Sushant Rauniyar</p>
+        </div>
+
+        <div id="switch">
+            <div class="flex-center">
+                <i class="ri-sun-fill" style="font-size: 2rem; margin-right: 1rem"></i>
+                <input type="range" class="form-range brightness" min=".4" max="1" step=".01" value="1" id="brightness-slider" />
+            </div>
+
+            <button id="dark-mode-toggle" class="dark-mode-toggle">
+                <svg width="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 496">
+                    <path fill="currentColor" d="M8,256C8,393,119,504,256,504S504,393,504,256,393,8,256,8,8,119,8,256ZM256,440V72a184,184,0,0,1,0,368Z" transform="translate(-8 -8)"></path>
+                </svg>
+            </button>
+
+            <button id="full" onclick="openFullscreen();"><i class="ri-fullscreen-line"></i></button>
+        </div>
+
+        <!-- Date and time Js -->
+        <script type="text/javascript">
+            var date = new Date();
+            const elementDate = document.getElementById("printDate");
+            const elementDay = document.getElementById("printDay");
+            const elementTime = document.getElementById("printTime");
+            const listOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+            function printDate() {
+                var day = date.getDate();
+                var month = date.getMonth();
+                var year = date.getFullYear();
+
+                elementDate.innerHTML = day + "/" + month + "/" + year;
+            }
+
+            function printDay() {
+                date = new Date();
+                var numberOfDay = date.getDay();
+                var day = listOfDays[numberOfDay];
+                elementDay.innerHTML = day;
+            }
+
+            function printTime() {
+                date = new Date();
+                var hours = date.getHours();
+                var minutes = date.getMinutes();
+                var seconds = date.getSeconds();
+
+                if (seconds < 10) {
+                    seconds = "0" + seconds;
+                }
+                if (minutes < 10) {
+                    minutes = "0" + minutes;
+                }
+                if (hours > 12) {
+                    hours = hours - 12;
+                    elementTime.innerHTML = hours + ":" + minutes + ":" + seconds + " PM";
+                } else if (hours < 12) {
+                    //hours = "0" + hours;
+                    elementTime.innerHTML = hours + ":" + minutes + ":" + seconds + " AM";
+                } else if ((hours = 12)) {
+                    elementTime.innerHTML = hours + ":" + minutes + ":" + seconds + " PM";
+                }
+            }
+
+            setInterval(function () {
+                printTime();
+                printDate();
+                printDay();
+            }, 1000);
+        </script>
+
+        <!-- Dark theme toggle -->
+        <script>
+            // check for saved 'darkMode' in localStorage
+            let darkMode = localStorage.getItem("darkMode");
+
+            const darkModeToggle = document.querySelector("#dark-mode-toggle");
+
+            const enableDarkMode = () => {
+                // 1. Add the class to the body
+                document.body.classList.add("darkmode");
+                // 2. Update darkMode in localStorage
+                localStorage.setItem("darkMode", "enabled");
+            };
+
+            const disableDarkMode = () => {
+                // 1. Remove the class from the body
+                document.body.classList.remove("darkmode");
+                // 2. Update darkMode in localStorage
+                localStorage.setItem("darkMode", null);
+            };
+
+            // If the user already visited and enabled darkMode
+            // start things off with it on
+            if (darkMode === "enabled") {
+                enableDarkMode();
+            }
+
+            // When someone clicks the button
+            darkModeToggle.addEventListener("click", () => {
+                // get their darkMode setting
+                darkMode = localStorage.getItem("darkMode");
+
+                // if it not current enabled, enable it
+                if (darkMode !== "enabled") {
+                    enableDarkMode();
+                    // if it has been enabled, turn it off
+                } else {
+                    disableDarkMode();
+                }
+            });
+        </script>
+
+        <!-- Fullscreen Js -->
+        <script>
+            var elem = document.documentElement;
+            function openFullscreen() {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    /* Safari */
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    /* IE11 */
+                    elem.msRequestFullscreen();
+                }
+            }
+
+            function closeFullscreen() {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    /* Safari */
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    /* IE11 */
+                    document.msExitFullscreen();
+                }
+            }
+        </script>
+
+        <!-- <script type="text/javascript">
+            document.getElementById('brightness-slider').addEventListener('input', function (e) {
+              document.body.style.opacity = this.value;
+            });
+            </script> -->
+
+        <!-- Brightness Value Localstorage-->
+        <script>
+            //let data = localStorage.getItem('data');
+            //localStorage.setItem('data', 1);
+
+            // let initialbrightness = 1;
+            // localStorage.setItem('data', initialbrightness);
+            const element = document.getElementById("brightness-slider");
+            element.addEventListener("input", function (e) {
+                //console.log(data);
+                localStorage.setItem("data", this.value);
+                document.body.style.opacity = localStorage.getItem("data");
+                document.getElementById("brightness-slider").setAttribute("value", this.value);
+            });
+            var dataval = localStorage.getItem("data") || 1;
+            document.getElementById("brightness-slider").setAttribute("value", dataval);
+            document.body.style.opacity = localStorage.getItem("data");
+        </script>
+
+        <script type="text/javascript">
+            function be_svg_favicon() {
+              echo '<link rel="icon" href="' . esc_url( get_stylesheet_directory_uri() . '/time-fill.svg' ) . '" type="image/svg+xml">';
+            }
+            add_action( 'wp_head', 'be_svg_favicon', 100 );
+        </script>
+    </body>
+</html>
