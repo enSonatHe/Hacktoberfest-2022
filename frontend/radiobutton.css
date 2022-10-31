@@ -1,0 +1,22 @@
+&__radio-button {
+    height: 3rem;
+    width: 3rem;
+    border: 5px solid $color-primary;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: -0.4rem;
+
+    &::after {
+        @include absCenter;
+        content: "";
+        display: block;
+        height: 1.3rem;
+        width: 1.3rem;
+        border-radius: 50%;
+        background-color: $color-primary;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+}
